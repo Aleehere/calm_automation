@@ -127,7 +127,7 @@ const ExperienceSection = () => {
   });
 
   return (
-    <section id="experience" className="relative py-24 bg-[#17191A]">
+    <section id="experience" className="relative py-24 bg-background">
       <div className="section-container">
         <motion.div
           ref={ref}

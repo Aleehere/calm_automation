@@ -131,10 +131,8 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         className="glow-card group cursor-pointer relative z-10"
       >
         <div className="p-6 relative overflow-hidden" style={{ transform: "translateZ(20px)" }}>
-          {/* Holographic Shimmer Effect */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity duration-500">
-            <div className="absolute inset-[-100%] bg-gradient-to-tr from-transparent via-primary/30 to-transparent animate-[shimmer_2s_infinite]" />
-          </div>
+          {/* Minimal Interaction Layer */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-5 pointer-events-none transition-opacity duration-300 bg-primary" />
 
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
@@ -152,7 +150,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
             {project.tech.map((tech) => (
               <span
                 key={tech}
-                className="px-2 py-1 text-[10px] uppercase tracking-wider rounded-md bg-[#AD6E54]/10 text-[#EEC5A0] border border-[#AD6E54]/20"
+                className="px-2 py-1 text-[10px] uppercase tracking-wider rounded-md bg-primary/10 text-primary border border-primary/20"
               >
                 {tech}
               </span>
@@ -250,7 +248,7 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3.5 py-1.5 rounded-lg bg-primary/5 text-primary text-xs font-bold border border-primary/10 tracking-wide hover:bg-primary/10 transition-colors"
+                      className="px-3.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold border border-primary/20 tracking-wide hover:bg-primary/20 transition-colors"
                     >
                       {tech}
                     </span>
@@ -292,7 +290,7 @@ const PortfolioSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="portfolio" className="relative py-20 overflow-hidden bg-[#273231]">
+    <section id="portfolio" className="relative py-20 overflow-hidden bg-background">
       <div className="section-container">
         <motion.div
           ref={ref}

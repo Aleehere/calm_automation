@@ -82,32 +82,6 @@ const LiquidProgressBar = ({ skill, delay }: { skill: Skill; delay: number }) =>
         </span>
       </div>
       <div className="h-2.5 w-full bg-muted/30 rounded-full overflow-hidden relative border border-white/5">
-        {/* Fill Background - Liquid Glow */}
-        <motion.div
-          className="h-full rounded-full relative overflow-hidden"
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${skill.level}%` } : { width: 0 }}
-          transition={{ duration: 1.5, delay, ease: [0.34, 1.56, 0.64, 1] }}
-          style={{
-            background: 'linear-gradient(90deg, #AD6E54, #EEC5A0)',
-            boxShadow: '0 0 15px rgba(238, 197, 160, 0.3)'
-          }}
-        >
-          {/* Wave Motion Layer 1 */}
-          <motion.div
-            animate={{ x: [-20, 20], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
-          />
-
-          {/* Liquid Ripple Streak */}
-          <motion.div
-            animate={{ left: ['-100%', '200%'] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
-            className="absolute inset-0 w-1/4 bg-white/10 skew-x-[30deg] blur-sm pointer-events-none"
-          />
-        </motion.div>
-
         {/* Interaction Glow */}
         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover/bar:opacity-100 transition-opacity pointer-events-none" />
       </div>
@@ -135,10 +109,7 @@ const SkillCard = ({ category, index }: { category: SkillCategory; index: number
   const highlightX = useSpring(useTransform(mouseX, [-200, 200], [0, 100]), springConfig);
   const highlightY = useSpring(useTransform(mouseY, [-200, 200], [0, 100]), springConfig);
 
-  const holographicBackground = useTransform(
-    [highlightX, highlightY],
-    ([hx, hy]) => `radial-gradient(circle at ${hx}% ${hy}%, rgba(255,255,255,0.8) 0%, transparent 60%)`
-  );
+  const holographicBackground = "transparent";
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -181,29 +152,7 @@ const SkillCard = ({ category, index }: { category: SkillCategory; index: number
     >
       <div className="glow-card p-8 h-full bg-card/40 backdrop-blur-xl border-white/5 relative overflow-hidden flex flex-col">
 
-        {/* Holographic Layer */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-20 transition-opacity z-20"
-          style={{
-            background: holographicBackground,
-            mixBlendMode: 'overlay'
-          }}
-        />
-
-        {/* Interior Energy Drift */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-              rotate: [0, 90, 0]
-            }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-1/2 -left-1/2 w-full h-full bg-primary blur-[100px] rounded-full"
-          />
-        </div>
-
-        <h3 className="text-xl font-bold mb-8 text-gradient relative z-10 tracking-tight">
+        <h3 className="text-xl font-bold mb-8 text-foreground relative z-10 tracking-tight">
           {category.title}
         </h3>
 
@@ -217,10 +166,6 @@ const SkillCard = ({ category, index }: { category: SkillCategory; index: number
           ))}
         </div>
 
-        {/* Bottom Bloom Glow */}
-        <div
-          className="absolute -bottom-10 -right-10 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none"
-        />
       </div>
     </motion.div>
   );
@@ -233,11 +178,8 @@ const SkillsSection = () => {
   });
 
   return (
-    <section id="skills" className="relative py-28 overflow-hidden bg-[#17191A]">
-      {/* WebGL-like energy wave background highlight */}
-      <div className="absolute inset-0 pointer-events-none opacity-20">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-1/2 bg-gradient-to-r from-primary/20 via-primary/5 to-transparent blur-[120px] rounded-full" />
-      </div>
+    <section id="skills" className="relative py-28 overflow-hidden bg-background">
+      {/* Clean background */}
 
       <div className="section-container relative z-10">
         <motion.div

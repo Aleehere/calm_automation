@@ -61,7 +61,7 @@ const ParticleBackground = () => {
         // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(238, 197, 160, ${particle.opacity})`; // #EEC5A0
+        ctx.fillStyle = `rgba(74, 144, 226, ${particle.opacity * 0.3})`; // Subtle Blue #4A90E2
         ctx.fill();
       });
 
@@ -78,7 +78,7 @@ const ParticleBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particlesRef.current[i].x, particlesRef.current[i].y);
             ctx.lineTo(particlesRef.current[j].x, particlesRef.current[j].y);
-            ctx.strokeStyle = `rgba(173, 110, 84, ${opacity * 0.5})`; // #AD6E54
+            ctx.strokeStyle = `rgba(0, 0, 0, ${opacity * 0.05})`; // Very light gray/black
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }

@@ -22,7 +22,7 @@ const AboutSection = () => {
   });
 
   return (
-    <section id="about" className="relative py-24 overflow-hidden bg-[#273231]">
+    <section id="about" className="relative py-24 overflow-hidden bg-background">
       <div className="section-container relative z-10" ref={ref}>
 
         {/* Heading & Subheading - Exactly Same as Reference */}
@@ -51,15 +51,10 @@ const AboutSection = () => {
             >
               {/* Outer Glow Ring & Breathing Bloom */}
               <motion.div
-                animate={{
-                  boxShadow: [
-                    "0 0 20px rgba(238, 197, 160, 0.1)",
-                    "0 0 40px rgba(238, 197, 160, 0.2)",
-                    "0 0 20px rgba(238, 197, 160, 0.1)"
-                  ]
-                }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-[#AD6E54]/20 relative z-10 overflow-hidden bg-[#17191A] p-1 shadow-2xl"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-border relative z-10 overflow-hidden bg-white p-1 shadow-sm group-hover:shadow-lg transition-shadow duration-500"
               >
                 <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative">
                   <motion.img
