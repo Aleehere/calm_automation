@@ -16,7 +16,7 @@ const techIcons = [
 ];
 
 const AboutSection = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>('/abr-image.png');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { ref, inView } = useInView({
     threshold: 0.1,
