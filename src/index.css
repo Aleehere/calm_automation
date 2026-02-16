@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Abdul Rehman Portfolio - Dark Constellation Theme */
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
+
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 186 100% 50%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 174 60% 40%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 222 30% 15%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 186 80% 45%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 186 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom portfolio tokens */
+    --glow-primary: 186 100% 50%;
+    --glow-secondary: 174 60% 40%;
+    --card-glow: 0 0 40px hsl(186 100% 50% / 0.15);
+    --text-gradient: linear-gradient(135deg, hsl(186 100% 50%), hsl(174 60% 50%));
+    --bg-gradient: linear-gradient(180deg, hsl(222 47% 6%) 0%, hsl(222 47% 4%) 100%);
+    
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 186 100% 50%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 15%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 186 100% 50%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 186 100% 50%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 174 60% 40%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 222 30% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 186 80% 45%;
+    --accent-foreground: 222 47% 6%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 186 100% 50%;
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 186 100% 50%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 15%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 186 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .glow-card {
+    @apply relative overflow-hidden rounded-xl border border-border bg-card;
+    box-shadow: var(--card-glow);
+    transition: all 0.3s ease;
+  }
+
+  .glow-card:hover {
+    box-shadow: 0 0 60px hsl(186 100% 50% / 0.25);
+    transform: translateY(-4px) scale(1.02);
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
+  .text-gradient {
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 20px hsl(186 100% 50% / 0.5);
+  }
+
+  .glow-button {
+    @apply relative overflow-hidden;
+    box-shadow: 0 0 20px hsl(186 100% 50% / 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .glow-button:hover {
+    box-shadow: 0 0 30px hsl(186 100% 50% / 0.5);
+  }
+
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-4 text-gradient;
+  }
+
+  .section-subtitle {
+    @apply text-muted-foreground text-lg mb-12 max-w-2xl;
+  }
+
+  .chip {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium;
+    @apply bg-muted border border-border text-foreground;
+    transition: all 0.2s ease;
+  }
+
+  .chip:hover {
+    @apply border-primary/50;
+    box-shadow: 0 0 15px hsl(186 100% 50% / 0.2);
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full bg-muted overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full rounded-full;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+  }
+
+  .timeline-dot {
+    @apply w-4 h-4 rounded-full bg-primary;
+    box-shadow: 0 0 15px hsl(186 100% 50% / 0.5);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 15px hsl(186 100% 50% / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 25px hsl(186 100% 50% / 0.8);
+    }
+  }
+
+  .nav-link {
+    @apply relative text-muted-foreground hover:text-foreground transition-colors duration-300;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg bg-muted border border-border;
+    @apply text-foreground placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
+    transition: all 0.3s ease;
+  }
+
+  .input-field:focus {
+    box-shadow: 0 0 20px hsl(186 100% 50% / 0.15);
+  }
+}
