@@ -7,87 +7,88 @@
 /* Abdul Rehman Portfolio - Dark Constellation Theme */
 
 @layer base {
-  @layer base {
-    :root {
-      --background: 222 20% 6%;
-      --foreground: 210 20% 98%;
+  :root {
+    --background: 222 33% 77%;
+    /* #B3BFD7 */
+    --foreground: 222 19% 15%;
+    /* Deep dark blue-gray for text */
 
-      --card: 222 20% 9%;
-      --card-foreground: 210 20% 98%;
+    --card: 222 33% 82%;
+    /* Slightly lighter than background */
+    --card-foreground: 222 19% 15%;
 
-      --popover: 222 20% 9%;
-      --popover-foreground: 210 20% 98%;
+    --popover: 222 33% 82%;
+    --popover-foreground: 222 19% 15%;
 
-      --primary: 214 25% 61%;
-      /* #8498B1 */
-      --primary-foreground: 222 20% 6%;
+    --primary: 222 19% 35%;
+    /* #48526A - Dark Slate for primary elements */
+    --primary-foreground: 222 33% 98%;
 
-      --secondary: 211 15% 51%;
-      /* #6F8195 */
-      --secondary-foreground: 210 20% 98%;
+    --secondary: 211 15% 51%;
+    /* #6F8195 */
+    --secondary-foreground: 222 19% 15%;
 
-      --muted: 222 15% 15%;
-      --muted-foreground: 215 15% 65%;
+    --muted: 222 25% 70%;
+    --muted-foreground: 222 15% 35%;
 
-      --accent: 222 19% 35%;
-      /* #48526A */
-      --accent-foreground: 210 20% 98%;
+    --accent: 211 15% 51%;
+    --accent-foreground: 222 33% 98%;
 
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 20% 98%;
+    --destructive: 0 84.2% 40.2%;
+    --destructive-foreground: 210 20% 98%;
 
-      --border: 222 15% 18%;
-      --input: 222 15% 18%;
-      --ring: 214 25% 61%;
+    --border: 222 20% 65%;
+    --input: 222 20% 65%;
+    --ring: 222 19% 35%;
 
-      --radius: 0.75rem;
+    --radius: 0.75rem;
 
-      /* Custom portfolio tokens - Muted Premium Style */
-      --glow-primary: 214 25% 61%;
-      --glow-secondary: 211 15% 51%;
-      --card-glow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      --text-gradient: linear-gradient(135deg, #8498B1, #6F8195);
-      --bg-gradient: linear-gradient(180deg, hsl(222 20% 6%) 0%, hsl(222 20% 4%) 100%);
+    /* Custom portfolio tokens - Premium Light Theme */
+    --glow-primary: 222 19% 35%;
+    --glow-secondary: 211 15% 51%;
+    --card-glow: 0 4px 15px rgba(72, 82, 106, 0.1);
+    --text-gradient: linear-gradient(135deg, #48526A, #2D3748);
+    --bg-gradient: linear-gradient(180deg, #B3BFD7 0%, #A5B2CE 100%);
 
-      --sidebar-background: 222 20% 8%;
-      --sidebar-foreground: 210 20% 98%;
-      --sidebar-primary: 214 25% 61%;
-      --sidebar-primary-foreground: 222 20% 6%;
-      --sidebar-accent: 222 15% 15%;
-      --sidebar-accent-foreground: 210 20% 98%;
-      --sidebar-border: 222 15% 18%;
-      --sidebar-ring: 214 25% 61%;
-    }
+    --sidebar-background: 222 33% 80%;
+    --sidebar-foreground: 222 19% 15%;
+    --sidebar-primary: 222 19% 35%;
+    --sidebar-primary-foreground: 222 33% 98%;
+    --sidebar-accent: 222 25% 70%;
+    --sidebar-accent-foreground: 222 19% 15%;
+    --sidebar-border: 222 20% 65%;
+    --sidebar-ring: 222 19% 35%;
+  }
 
-    .dark {
-      --background: 222 20% 6%;
-      --foreground: 210 20% 98%;
-      --card: 222 20% 9%;
-      --card-foreground: 210 20% 98%;
-      --popover: 222 20% 9%;
-      --popover-foreground: 210 20% 98%;
-      --primary: 214 25% 61%;
-      --primary-foreground: 222 20% 6%;
-      --secondary: 211 15% 51%;
-      --secondary-foreground: 210 20% 98%;
-      --muted: 222 15% 15%;
-      --muted-foreground: 215 15% 65%;
-      --accent: 222 19% 35%;
-      --accent-foreground: 210 20% 98%;
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 20% 98%;
-      --border: 222 15% 18%;
-      --input: 222 15% 18%;
-      --ring: 214 25% 61%;
-      --sidebar-background: 222 20% 8%;
-      --sidebar-foreground: 210 20% 98%;
-      --sidebar-primary: 214 25% 61%;
-      --sidebar-primary-foreground: 222 20% 6%;
-      --sidebar-accent: 222 15% 15%;
-      --sidebar-accent-foreground: 210 20% 98%;
-      --sidebar-border: 222 15% 18%;
-      --sidebar-ring: 214 25% 61%;
-    }
+  .dark {
+    /* Consistency for light background requested */
+    --background: 222 33% 77%;
+    --foreground: 222 19% 15%;
+    --card: 222 33% 82%;
+    --card-foreground: 222 19% 15%;
+    --popover: 222 33% 82%;
+    --popover-foreground: 222 19% 15%;
+    --primary: 222 19% 35%;
+    --primary-foreground: 222 33% 98%;
+    --secondary: 211 15% 51%;
+    --secondary-foreground: 222 19% 15%;
+    --muted: 222 25% 70%;
+    --muted-foreground: 222 15% 35%;
+    --accent: 211 15% 51%;
+    --accent-foreground: 222 33% 98%;
+    --destructive: 0 84.2% 40.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 222 20% 65%;
+    --input: 222 20% 65%;
+    --ring: 222 19% 35%;
+    --sidebar-background: 222 33% 80%;
+    --sidebar-foreground: 222 19% 15%;
+    --sidebar-primary: 222 19% 35%;
+    --sidebar-primary-foreground: 222 33% 98%;
+    --sidebar-accent: 222 25% 70%;
+    --sidebar-accent-foreground: 222 19% 15%;
+    --sidebar-border: 222 20% 65%;
+    --sidebar-ring: 222 19% 35%;
   }
 }
 
