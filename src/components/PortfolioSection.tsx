@@ -281,9 +281,8 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
-    </motion.div >
   );
 };
 
