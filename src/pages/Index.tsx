@@ -7,6 +7,7 @@ import PortfolioSection from '@/components/PortfolioSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import StatsSection from '@/components/StatsSection';
 
 const Index = () => {
   return (
@@ -15,6 +16,7 @@ const Index = () => {
       <Navbar />
       <main className="relative z-10">
         <HeroSection />
+        <StatsSection />
         <AboutSection />
         <SkillsSection />
         <PortfolioSection />

@@ -54,7 +54,7 @@ const AboutSection = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-border relative z-10 overflow-hidden bg-white p-1 shadow-sm group-hover:shadow-lg transition-shadow duration-500"
+                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-border relative z-10 overflow-hidden bg-card p-1 shadow-sm hover:shadow-lg transition-shadow duration-500"
               >
                 <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative">
                   <motion.img
@@ -149,7 +149,7 @@ const AboutSection = () => {
                       className="group relative cursor-pointer"
                     >
                       <div
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/10 flex items-center justify-center transition-all shadow-lg"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-card border border-border flex items-center justify-center transition-all shadow-lg"
                         style={{
                           boxShadow: `0 0 15px ${tech.color}22`,
                           borderLeft: `2px solid ${tech.color}44`
@@ -158,7 +158,7 @@ const AboutSection = () => {
                         {tech.icon}
 
                         {/* Interactive Tooltip */}
-                        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-black/90 rounded text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10 z-50">
+                        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-card rounded text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border z-50">
                           {tech.name}
                         </div>
                       </div>

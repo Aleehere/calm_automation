@@ -81,7 +81,13 @@ const LiquidProgressBar = ({ skill, delay }: { skill: Skill; delay: number }) =>
           {count}%
         </span>
       </div>
-      <div className="h-2.5 w-full bg-muted/30 rounded-full overflow-hidden relative border border-white/5">
+      <div className="h-2 w-full bg-muted border border-border/50 rounded-full overflow-hidden relative">
+        <motion.div
+          className="height-full absolute top-0 left-0 bottom-0 bg-primary"
+          initial={{ width: 0 }}
+          animate={inView ? { width: `${skill.level}%` } : { width: 0 }}
+          transition={{ duration: 1.5, delay: delay, ease: "easeOut" }}
+        />
         {/* Interaction Glow */}
         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover/bar:opacity-100 transition-opacity pointer-events-none" />
       </div>

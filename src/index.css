@@ -100,7 +100,7 @@
     font-family: 'Inter', system-ui, sans-serif;
     background-image: var(--bg-gradient);
     background-size: 24px 24px;
-    /* Professional dot pattern background */
+    transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
   }
 }
 

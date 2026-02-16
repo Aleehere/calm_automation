@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ChevronDown, Download, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import TerminalIntro from './TerminalIntro';
 
 const HeroSection = () => {
   return (
@@ -40,7 +41,7 @@ const HeroSection = () => {
             }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight relative z-10"
           >
-            <span className="text-gradient inline-block">Abdul Rehman</span>
+            <span className="text-primary inline-block">Abdul Rehman</span>
           </motion.h1>
 
         </div>
@@ -112,6 +113,9 @@ const HeroSection = () => {
             </a>
           </Button>
         </motion.div>
+
+        {/* Terminal Block */}
+        <TerminalIntro />
 
         {/* Scroll Indicator */}
         <motion.div
