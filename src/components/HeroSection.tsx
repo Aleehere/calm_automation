@@ -127,7 +127,7 @@ const HeroSection = () => {
             variant="outline"
             className="px-8 py-6 text-base font-medium rounded-full border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
           >
-            <a href="/Abdul-Rehman-CV.pdf" download="Abdul-Rehman-CV.pdf">
+            <a href="/Abdul-Rehman-CV.pdf" download="Abdul Rehman CV.pdf">
               <Download className="mr-2 h-5 w-5" />
               Download CV
             </a>

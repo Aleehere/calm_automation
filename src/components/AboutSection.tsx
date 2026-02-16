@@ -72,42 +72,43 @@ const AboutSection = () => {
                   />
                 </div>
               </motion.div>
+            </motion.div>
 
-              {/* Introduction Panel - Below Profile Circle */}
-              <motion.div
-                initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-                animate={inView ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
-                transition={{ duration: 1, delay: 0.6 }} // Exactly 600ms delay
-                className="glow-card p-8 md:p-10 w-full max-w-2xl"
-              >
-                <h3 className="text-2xl font-semibold mb-6 text-foreground text-center lg:text-left">
-                  Hi, I'm an <span className="text-gradient">Automation Engineer</span> & Full-Stack Developer
-                </h3>
+            {/* Introduction Panel - Below Profile Circle */}
+            <motion.div
+              initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+              animate={inView ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
+              transition={{ duration: 1, delay: 0.6 }} // Exactly 600ms delay
+              className="glow-card p-8 md:p-10 w-full max-w-2xl"
+            >
+              <h3 className="text-2xl font-semibold mb-6 text-foreground text-center lg:text-left">
+                Hi, I'm an <span className="text-gradient">Automation Engineer</span> & Full-Stack Developer
+              </h3>
 
-                <div className="space-y-4 text-muted-foreground leading-relaxed text-center lg:text-left">
-                  <p>
-                    I build production-ready automation systems and AI workflows that reduce manual work and scale operations.
-                    My experience spans workflow orchestration, API integrations, AI agents, and modern full-stack development.
-                  </p>
-                  <p>
-                    I focus on clean logic, reliable systems, and real-world business outcomes.
-                  </p>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-center lg:text-left">
+                <p>
+                  I build production-ready automation systems and AI workflows that reduce manual work and scale operations.
+                  My experience spans workflow orchestration, API integrations, AI agents, and modern full-stack development.
+                </p>
+                <p>
+                  I focus on clean logic, reliable systems, and real-world business outcomes.
+                </p>
+              </div>
+
+              {/* Competencies Chips - Original Styling */}
+              <div className="mt-10">
+                <h4 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-widest inline-block border-b border-primary/20 pb-1">
+                  Core Competencies
+                </h4>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {techIcons.map((tech) => (
+                    <span key={tech.name} className="chip text-xs">
+                      {tech.name}
+                    </span>
+                  ))}
                 </div>
-
-                {/* Competencies Chips - Original Styling */}
-                <div className="mt-10">
-                  <h4 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-widest inline-block border-b border-primary/20 pb-1">
-                    Core Competencies
-                  </h4>
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {techIcons.map((tech) => (
-                      <span key={tech.name} className="chip text-xs">
-                        {tech.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+              </div>
+            </motion.div>
           </div>
 
           {/* Right Side: Animated Orbiting Tech Visualization */}
