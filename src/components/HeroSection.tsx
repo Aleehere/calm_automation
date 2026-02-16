@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 const HeroSection = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden">
-      {/* Background Effect - keep it subtle to not distract */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background opacity-40 z-0 pointer-events-none" />
+      {/* Premium Background Highlights */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="section-container text-center relative z-10">
 

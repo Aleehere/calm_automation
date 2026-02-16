@@ -98,17 +98,21 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    background-image: var(--bg-gradient);
+    background-size: 24px 24px;
+    /* Professional dot pattern background */
   }
 }
 
 @layer components {
   .glow-card {
-    @apply relative overflow-hidden rounded-lg border border-border bg-card shadow-sm;
-    transition: all 0.3s ease;
+    @apply relative overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .glow-card:hover {
-    @apply shadow-md -translate-y-1 border-primary/30;
+    @apply shadow-xl -translate-y-1.5 border-primary/20;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
   }
 
   .text-gradient {
