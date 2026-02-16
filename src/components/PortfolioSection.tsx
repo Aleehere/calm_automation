@@ -152,7 +152,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
             {project.tech.map((tech) => (
               <span
                 key={tech}
-                className="px-2 py-1 text-[10px] uppercase tracking-wider rounded-md bg-primary/5 text-primary border border-primary/10"
+                className="px-2 py-1 text-[10px] uppercase tracking-wider rounded-md bg-[#AD6E54]/10 text-[#EEC5A0] border border-[#AD6E54]/20"
               >
                 {tech}
               </span>
@@ -292,7 +292,7 @@ const PortfolioSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="portfolio" className="relative py-20 overflow-hidden">
+    <section id="portfolio" className="relative py-20 overflow-hidden bg-[#273231]">
       <div className="section-container">
         <motion.div
           ref={ref}

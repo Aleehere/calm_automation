@@ -109,15 +109,15 @@
 
 @layer components {
   .glow-card {
-    @apply relative overflow-hidden rounded-xl border border-border bg-card;
+    @apply relative overflow-hidden rounded-xl border border-primary/10 bg-card/60 backdrop-blur-md;
     box-shadow: var(--card-glow);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .glow-card:hover {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transform: translateY(-4px);
-    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 10px 40px rgba(238, 197, 160, 0.15);
+    transform: translateY(-6px);
+    border-color: #EEC5A033;
   }
 
   .text-gradient {
@@ -133,13 +133,27 @@
   }
 
   .glow-button {
-    @apply relative overflow-hidden border border-primary/20 bg-primary/5;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    @apply relative overflow-hidden transition-all duration-500;
   }
 
-  .glow-button:hover {
-    @apply brightness-110 bg-primary/10 border-primary/40;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  /* Primary Button Styling */
+  .glow-button.glow-primary {
+    @apply bg-primary text-background border-none;
+  }
+
+  .glow-button.glow-primary:hover {
+    @apply brightness-110;
+    box-shadow: 0 0 25px rgba(173, 110, 84, 0.4);
+  }
+
+  /* Secondary/Outline Button Styling */
+  .glow-button.glow-outline {
+    @apply border border-secondary/50 text-secondary bg-transparent;
+  }
+
+  .glow-button.glow-outline:hover {
+    @apply bg-secondary/10 border-secondary;
+    box-shadow: 0 0 20px rgba(238, 197, 160, 0.2);
   }
 
   .section-container {
@@ -170,7 +184,25 @@
 
   .progress-bar-fill {
     @apply h-full rounded-full;
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+    background: linear-gradient(90deg, #AD6E54, #EEC5A0);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    animation: flow sweep 3s infinite linear;
+  }
+
+  @keyframes sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
   }
 
   .timeline-dot {

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden">
+    <section id="home" className="min-h-screen flex items-center justify-center relative bg-[#17191A] overflow-hidden">
       {/* Background Effect - keep it subtle to not distract */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background opacity-40 z-0 pointer-events-none" />
 
@@ -93,7 +93,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 1.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-5"
         >
-          <Button asChild className="glow-button px-8 py-6 text-base font-medium rounded-full">
+          <Button asChild className="glow-button glow-primary px-8 py-6 text-base font-medium rounded-full">
             <a href="#contact">
               <Mail className="mr-2 h-5 w-5" />
               Get In Touch
@@ -103,7 +103,7 @@ const HeroSection = () => {
           <Button
             asChild
             variant="outline"
-            className="px-8 py-6 text-base font-medium rounded-full border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
+            className="glow-button glow-outline px-8 py-6 text-base font-medium rounded-full"
           >
             <a href="/Abdul-Rehman-CV.pdf" download="Abdul Rehman CV.pdf">
               <Download className="mr-2 h-5 w-5" />

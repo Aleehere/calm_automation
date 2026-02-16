@@ -89,8 +89,8 @@ const LiquidProgressBar = ({ skill, delay }: { skill: Skill; delay: number }) =>
           animate={inView ? { width: `${skill.level}%` } : { width: 0 }}
           transition={{ duration: 1.5, delay, ease: [0.34, 1.56, 0.64, 1] }}
           style={{
-            background: 'linear-gradient(90deg, hsl(186, 100%, 50%), hsl(174, 60%, 40%))',
-            boxShadow: '0 0 15px hsl(186, 100%, 50%, 0.5)'
+            background: 'linear-gradient(90deg, #AD6E54, #EEC5A0)',
+            boxShadow: '0 0 15px rgba(238, 197, 160, 0.3)'
           }}
         >
           {/* Wave Motion Layer 1 */}
@@ -233,7 +233,7 @@ const SkillsSection = () => {
   });
 
   return (
-    <section id="skills" className="relative py-28 overflow-hidden">
+    <section id="skills" className="relative py-28 overflow-hidden bg-[#17191A]">
       {/* WebGL-like energy wave background highlight */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-1/2 bg-gradient-to-r from-primary/20 via-primary/5 to-transparent blur-[120px] rounded-full" />

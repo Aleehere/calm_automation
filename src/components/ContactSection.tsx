@@ -82,7 +82,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="relative">
+    <section id="contact" className="relative py-24 bg-[#273231]">
       <div className="section-container">
         <motion.div
           ref={ref}
