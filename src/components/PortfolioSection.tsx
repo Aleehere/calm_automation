@@ -129,9 +129,6 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
         layoutId={`project-${project.title}`}
-        className="glow-card group cursor-pointer relative z-10 overflow-hidden"
-      >
-        layoutId={`project-${project.title}`}
         className="glow-card group cursor-pointer relative z-10 overflow-hidden flex flex-col h-full"
       >
         {/* Project Image Header */}
