@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useState, useRef } from 'react';
 import { Camera, Zap, Network, Brain, Globe, Code2, Layers, Cpu, Wrench, Database } from 'lucide-react';
+import { Magnetic } from './Magnetic';
 
 const techIcons = [
   { name: 'n8n', icon: <Zap className="w-5 h-5 text-[#ff6d5a]" />, color: '#ff6d5a' },
@@ -49,31 +50,34 @@ const AboutSection = () => {
               transition={{ duration: 0.8 }}
               className="relative mb-12"
             >
-              {/* Outer Glow Ring & Breathing Bloom */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-border relative z-10 overflow-hidden bg-card p-1 shadow-sm hover:shadow-lg transition-shadow duration-500"
-              >
-                <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative">
-                  <motion.img
-                    src="/abr-image.png"
-                    alt="Profile"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </motion.div>
+              <Magnetic strength={0.1}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ rotateX: 10, rotateY: 10 }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-border/50 relative z-10 overflow-hidden bg-white/50 dark:bg-card/50 backdrop-blur-xl p-1 shadow-2xl transition-all duration-500 hover:border-primary/50"
+                  style={{ perspective: 1000 }}
+                >
+                  <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center relative">
+                    <motion.img
+                      src="/abr-image.png"
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </motion.div>
+                {/* 3D Reflection Glare */}
+                <div className="absolute inset-0 pointer-events-none rounded-full bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Magnetic>
             </motion.div>
 
             {/* Introduction Panel - Below Profile Circle */}
             <motion.div
-              initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+              initial={{ opacity: 0, filter: "blur(20px)", y: 20 }}
               animate={inView ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
-              transition={{ duration: 1, delay: 0.6 }} // Exactly 600ms delay
-              className="glow-card p-8 md:p-10 w-full max-w-2xl"
+              transition={{ duration: 1, delay: 0.6 }}
+              className="glow-card p-8 md:p-10 w-full max-w-2xl bg-card/60 backdrop-blur-xl border-border/50"
             >
               <h3 className="text-2xl font-semibold mb-6 text-foreground text-center lg:text-left">
                 Hi, I'm an <span className="text-gradient">Automation Engineer</span> & Full-Stack Developer

@@ -128,9 +128,18 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
-        className="glow-card group cursor-pointer relative z-10"
+        className="glow-card group cursor-pointer relative z-10 overflow-hidden"
       >
-        <div className="p-6 relative overflow-hidden" style={{ transform: "translateZ(20px)" }}>
+        <div className="p-6 relative overflow-hidden" style={{ transform: "translateZ(30px)" }}>
+          {/* Holographic Reflection Layer */}
+          <motion.div
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%)",
+              x: useTransform(mouseX, [-0.5, 0.5], ["-100%", "100%"]),
+              y: useTransform(mouseY, [-0.5, 0.5], ["-100%", "100%"]),
+            }}
+            className="absolute inset-0 pointer-events-none z-20"
+          />
           {/* Minimal Interaction Layer */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-5 pointer-events-none transition-opacity duration-300 bg-primary" />
 
@@ -143,7 +152,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
           <h3 className="text-lg font-semibold mb-3 text-foreground group-hover:text-gradient transition-all">
             {project.title}
           </h3>
-          <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2">
+          <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2" style={{ transform: "translateZ(10px)" }}>
             {project.description}
           </p>
           <div className="flex flex-wrap gap-2">

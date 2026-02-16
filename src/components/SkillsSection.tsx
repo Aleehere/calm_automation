@@ -81,13 +81,20 @@ const LiquidProgressBar = ({ skill, delay }: { skill: Skill; delay: number }) =>
           {count}%
         </span>
       </div>
-      <div className="h-2 w-full bg-muted border border-border/50 rounded-full overflow-hidden relative">
+      <div className="h-2.5 w-full bg-muted border border-border/40 rounded-full overflow-hidden relative shadow-inner">
         <motion.div
-          className="height-full absolute top-0 left-0 bottom-0 bg-primary"
           initial={{ width: 0 }}
           animate={inView ? { width: `${skill.level}%` } : { width: 0 }}
-          transition={{ duration: 1.5, delay: delay, ease: "easeOut" }}
-        />
+          transition={{ duration: 2, delay: delay, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-primary to-primary/40"
+        >
+          {/* Light Sweep Effect */}
+          <motion.div
+            animate={{ x: ['-100%', '200%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+          />
+        </motion.div>
         {/* Interaction Glow */}
         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover/bar:opacity-100 transition-opacity pointer-events-none" />
       </div>
@@ -145,18 +152,24 @@ const SkillCard = ({ category, index }: { category: SkillCategory; index: number
         inViewRef(el);
       }}
       initial={{ opacity: 0, y: 80, scale: 0.9 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      animate={inView ? {
+        opacity: 1,
+        y: [0, -10, 0],
+        scale: 1,
+      } : {}}
       transition={{
-        duration: 0.8,
-        delay: index * 0.14,
-        ease: [0.22, 1, 0.36, 1]
+        opacity: { duration: 0.8, delay: index * 0.14 },
+        y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+        scale: { duration: 0.8, delay: index * 0.14 },
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, perspective: 1000 }}
       className="relative group preserve-3d"
     >
-      <div className="glow-card p-8 h-full bg-card/40 backdrop-blur-xl border-white/5 relative overflow-hidden flex flex-col">
+      <div className="glow-card p-8 h-full bg-card/60 backdrop-blur-2xl border-border/40 relative overflow-hidden flex flex-col shadow-2xl">
+        {/* Border Light Interpolation */}
+        <div className="absolute inset-0 rounded-xl border border-white/20 pointer-events-none z-20" />
 
         <h3 className="text-xl font-bold mb-8 text-foreground relative z-10 tracking-tight">
           {category.title}

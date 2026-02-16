@@ -116,8 +116,60 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
     background-image: var(--bg-gradient);
-    background-size: 24px 24px;
-    transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+    background-size: 32px 32px;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-prism {
+    @apply bg-card/60 backdrop-blur-2xl border-border/40 box-border;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 12px 40px -12px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .glass-prism {
+    @apply bg-card/40 backdrop-blur-2xl border-white/5;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+      0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .shader-wave {
+    background: linear-gradient(-45deg,
+        hsla(var(--primary), 0.05),
+        transparent,
+        hsla(var(--primary), 0.02),
+        transparent);
+    background-size: 400% 400%;
+    animation: wave 15s ease infinite;
+  }
+
+  @keyframes wave {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
   }
 }
 

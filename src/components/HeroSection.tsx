@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Download, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TerminalIntro from './TerminalIntro';
+import { Magnetic } from './Magnetic';
 
 const HeroSection = () => {
   return (
@@ -33,11 +34,11 @@ const HeroSection = () => {
         */}
         <div className="relative inline-block mb-6">
           <motion.h1
-            initial={{ opacity: 0, y: 40, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 40, scale: 0.92, filter: "blur(20px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             transition={{
-              duration: 1.0,
-              ease: [0.19, 1, 0.22, 1], // Premium feel easing
+              duration: 1.2,
+              ease: [0.19, 1, 0.22, 1],
             }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight relative z-10"
           >
@@ -95,23 +96,27 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 1.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-5"
         >
-          <Button asChild className="glow-button glow-primary px-8 py-6 text-base font-medium rounded-full">
-            <a href="#contact">
-              <Mail className="mr-2 h-5 w-5" />
-              Get In Touch
-            </a>
-          </Button>
+          <Magnetic strength={0.2}>
+            <Button asChild className="glow-button glow-primary px-8 py-6 text-base font-medium rounded-full">
+              <a href="#contact">
+                <Mail className="mr-2 h-5 w-5" />
+                Get In Touch
+              </a>
+            </Button>
+          </Magnetic>
 
-          <Button
-            asChild
-            variant="outline"
-            className="glow-button glow-outline px-8 py-6 text-base font-medium rounded-full"
-          >
-            <a href="/Abdul-Rehman-CV.pdf" download="Abdul Rehman CV.pdf">
-              <Download className="mr-2 h-5 w-5" />
-              Download CV
-            </a>
-          </Button>
+          <Magnetic strength={0.2}>
+            <Button
+              asChild
+              variant="outline"
+              className="glow-button glow-outline px-8 py-6 text-base font-medium rounded-full"
+            >
+              <a href="/Abdul-Rehman-CV.pdf" download="Abdul Rehman CV.pdf">
+                <Download className="mr-2 h-5 w-5" />
+                Download CV
+              </a>
+            </Button>
+          </Magnetic>
         </motion.div>
 
         {/* Terminal Block */}
