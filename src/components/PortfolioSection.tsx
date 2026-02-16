@@ -131,42 +131,39 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         layoutId={`project-${project.title}`}
         className="glow-card group cursor-pointer relative z-10 overflow-hidden"
       >
-        <div className="p-6 relative overflow-hidden" style={{ transform: "translateZ(30px)" }}>
-          <motion.div
-            layoutId={`project-icon-bg-${project.title}`}
-            className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity duration-300"
+        layoutId={`project-${project.title}`}
+        className="glow-card group cursor-pointer relative z-10 overflow-hidden flex flex-col h-full"
+      >
+        {/* Project Image Header */}
+        <div className="relative aspect-video overflow-hidden bg-muted/20">
+          <motion.img
+            src={project.screenshot}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            style={{ imageRendering: 'auto' }}
           />
-          {/* Holographic Reflection Layer */}
-          <motion.div
-            style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%)",
-              x: useTransform(mouseX, [-0.5, 0.5], ["-100%", "100%"]),
-              y: useTransform(mouseY, [-0.5, 0.5], ["-100%", "100%"]),
-            }}
-            className="absolute inset-0 pointer-events-none z-20"
-          />
-          {/* Minimal Interaction Layer */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-5 pointer-events-none transition-opacity duration-300 bg-primary" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60" />
+        </div>
 
+        <div className="p-6 relative flex-grow flex flex-col" style={{ transform: "translateZ(30px)" }}>
           <div className="flex items-center justify-between mb-4">
             <motion.div
               layoutId={`project-icon-${project.title}`}
-              className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300"
+              className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300"
             >
               {project.icon}
             </motion.div>
             <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-all duration-300 group-hover:rotate-12" />
           </div>
+
           <motion.h3
             layoutId={`project-title-${project.title}`}
             className="text-lg font-semibold mb-3 text-foreground group-hover:text-gradient transition-all"
           >
             {project.title}
           </motion.h3>
-          <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2" style={{ transform: "translateZ(10px)" }}>
-            {project.description}
-          </p>
-          <div className="flex flex-wrap gap-2">
+
+          <div className="flex flex-wrap gap-2 mt-auto">
             {project.tech.map((tech) => (
               <span
                 key={tech}
@@ -179,33 +176,7 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         </div>
       </motion.div>
 
-      {/* Interactive Screenshot Preview */}
-      <AnimatePresence>
-        {isHovering && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: -40 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            style={{
-              x: previewX,
-              y: previewY,
-            }}
-            className="absolute left-1/2 -translate-x-1/2 bottom-full z-50 pointer-events-none"
-          >
-            <div className="w-[280px] rounded-xl overflow-hidden border border-primary/40 shadow-[0_0_40px_rgba(34,211,238,0.3)] bg-card/90 backdrop-blur-md">
-              <img
-                src={project.screenshot}
-                alt={project.title}
-                className="w-full h-40 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-3 left-4 right-4 text-xs font-semibold text-white/90 line-clamp-1">
-                {project.title}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Project image/pop-up logic removed to be embedded in card or handled by modal only */}
     </div>
   );
 };
@@ -241,76 +212,81 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
 
         <div className="flex flex-col lg:grid lg:grid-cols-[1.2fr,0.8fr] h-full overflow-hidden">
           {/* Main Visual - Larger and more prominent */}
-          <div className="relative h-[250px] md:h-[400px] lg:h-full bg-black/20 overflow-hidden group">
-            <img
+          <div className="relative h-[300px] md:h-[450px] lg:h-full bg-black/40 overflow-hidden group">
+            <motion.img
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
               src={project.screenshot}
               alt={project.title}
-              className="w-full h-full object-contain bg-[#0a0a0a] transition-transform duration-700 group-hover:scale-[1.02]"
+              className="w-full h-full object-contain bg-[#050505] transition-transform duration-700 group-hover:scale-[1.05]"
+              style={{ imageRendering: 'auto' }}
             />
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-
-            {/* "Full Pic" Hint */}
-            <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 pointer-events-none">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">Detailed Workflow View</span>
-            </div>
+            {/* Overlay Gradient for depth */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
           </div>
 
-          <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-card overflow-y-auto">
-            <motion.div
-              layoutId={`project-icon-${project.title}`}
-              className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 shadow-inner ring-1 ring-primary/20"
-            >
-              {project.icon}
-            </motion.div>
-            <motion.h2
-              layoutId={`project-title-${project.title}`}
-              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gradient leading-tight"
-            >
-              {project.title}
-            </motion.h2>
-            <p className="text-muted-foreground text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-prose">
-              {project.description}
-            </p>
+          {/* "Full Pic" Hint */}
+          <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 pointer-events-none">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">Detailed Workflow View</span>
+          </div>
+        </div>
 
-            <div className="space-y-8">
-              <div>
-                <h4 className="text-xs font-bold text-foreground/50 uppercase tracking-[0.2em] mb-4">Architecture & Tools</h4>
-                <div className="flex flex-wrap gap-2.5">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold border border-primary/20 tracking-wide hover:bg-primary/20 transition-colors"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+        <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-card overflow-y-auto">
+          <motion.div
+            layoutId={`project-icon-${project.title}`}
+            className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 shadow-inner ring-1 ring-primary/20"
+          >
+            {project.icon}
+          </motion.div>
+          <motion.h2
+            layoutId={`project-title-${project.title}`}
+            className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gradient leading-tight"
+          >
+            {project.title}
+          </motion.h2>
+          <p className="text-muted-foreground text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-prose">
+            {project.description}
+          </p>
+
+          <div className="space-y-8">
+            <div>
+              <h4 className="text-xs font-bold text-foreground/50 uppercase tracking-[0.2em] mb-4">Architecture & Tools</h4>
+              <div className="flex flex-wrap gap-2.5">
+                {project.tech.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold border border-primary/20 tracking-wide hover:bg-primary/20 transition-colors"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
+            </div>
 
-              <div className="flex flex-wrap gap-4 pt-2">
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="glow-button inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg shadow-primary/20"
-                >
-                  View Detailed Specs <ExternalLink className="h-4 w-4" />
-                </motion.button>
+            <div className="flex flex-wrap gap-4 pt-2">
+              <motion.button
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="glow-button inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg shadow-primary/20"
+              >
+                View Detailed Specs <ExternalLink className="h-4 w-4" />
+              </motion.button>
 
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-muted/50 text-foreground font-bold text-sm tracking-wide border border-border hover:bg-muted transition-all"
-                >
-                  Request Case Study
-                </motion.button>
-              </div>
+              <motion.button
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-muted/50 text-foreground font-bold text-sm tracking-wide border border-border hover:bg-muted transition-all"
+              >
+                Request Case Study
+              </motion.button>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
+    </motion.div >
   );
 };
 
