@@ -42,20 +42,6 @@ const HeroSection = () => {
             <span className="text-gradient inline-block">Abdul Rehman</span>
           </motion.h1>
 
-          {/* Shine/Glow Sweep Effect */}
-          {/* Sweeps across after the main text settles (delay 1.0s) */}
-          <motion.div
-            initial={{ left: "-100%", opacity: 0 }}
-            animate={{ left: "200%", opacity: 1 }} // Move way past to ensure full clear
-            transition={{
-              delay: 1.0,
-              duration: 1.2,
-              ease: "easeInOut",
-              repeat: 0,
-            }}
-            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none z-20 mix-blend-overlay"
-            style={{ filter: "blur(5px)" }}
-          />
         </div>
 
         {/* Role/Title Animation - Delayed */}
@@ -78,18 +64,10 @@ const HeroSection = () => {
         >
           <motion.p
             className="text-xl md:text-2xl text-primary font-medium tracking-wide"
-            animate={{
-              textShadow: [
-                "0 0 10px rgba(6,182,212,0.2)",
-                "0 0 20px rgba(6,182,212,0.4)",
-                "0 0 10px rgba(6,182,212,0.2)"
-              ]
-            }}
             transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2.2 // Start pulsing sooner
+              duration: 0.8,
+              delay: 1.4,
+              ease: "easeOut"
             }}
           >
             {'{ Automation Engineer & Full-Stack Developer }'}

@@ -51,16 +51,7 @@ const AboutSection = () => {
             >
               {/* Outer Glow Ring & Breathing Bloom */}
               <motion.div
-                animate={{
-                  boxShadow: [
-                    "0 0 20px rgba(6,182,212,0.2)",
-                    "0 0 40px rgba(6,182,212,0.4)",
-                    "0 0 20px rgba(6,182,212,0.2)"
-                  ],
-                  scale: [1, 1.02, 1]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-primary/30 relative z-10 overflow-hidden bg-card p-1 shadow-2xl"
+                className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-primary/20 relative z-10 overflow-hidden bg-card p-1 shadow-2xl"
               >
                 <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative">
                   <motion.img
@@ -180,7 +171,7 @@ const AboutSection = () => {
 
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 
