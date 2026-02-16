@@ -128,9 +128,14 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
+        layoutId={`project-${project.title}`}
         className="glow-card group cursor-pointer relative z-10 overflow-hidden"
       >
         <div className="p-6 relative overflow-hidden" style={{ transform: "translateZ(30px)" }}>
+          <motion.div
+            layoutId={`project-icon-bg-${project.title}`}
+            className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity duration-300"
+          />
           {/* Holographic Reflection Layer */}
           <motion.div
             style={{
@@ -144,14 +149,20 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
           <div className="absolute inset-0 opacity-0 group-hover:opacity-5 pointer-events-none transition-opacity duration-300 bg-primary" />
 
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+            <motion.div
+              layoutId={`project-icon-${project.title}`}
+              className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300"
+            >
               {project.icon}
-            </div>
+            </motion.div>
             <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-all duration-300 group-hover:rotate-12" />
           </div>
-          <h3 className="text-lg font-semibold mb-3 text-foreground group-hover:text-gradient transition-all">
+          <motion.h3
+            layoutId={`project-title-${project.title}`}
+            className="text-lg font-semibold mb-3 text-foreground group-hover:text-gradient transition-all"
+          >
             {project.title}
-          </h3>
+          </motion.h3>
           <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2" style={{ transform: "translateZ(10px)" }}>
             {project.description}
           </p>
@@ -210,12 +221,17 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
       <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" onClick={onClose} />
 
       <motion.div
-        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        layoutId={`project-${project.title}`}
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="relative w-full max-w-5xl bg-card border border-border rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
       >
+        <motion.div
+          layoutId={`project-icon-bg-${project.title}`}
+          className="absolute inset-0 bg-primary/5 pointer-events-none"
+        />
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-[110] p-2 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-all shadow-lg"
@@ -242,10 +258,18 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
           </div>
 
           <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-card overflow-y-auto">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 shadow-inner ring-1 ring-primary/20">
+            <motion.div
+              layoutId={`project-icon-${project.title}`}
+              className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 shadow-inner ring-1 ring-primary/20"
+            >
               {project.icon}
-            </div>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gradient leading-tight">{project.title}</h2>
+            </motion.div>
+            <motion.h2
+              layoutId={`project-title-${project.title}`}
+              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gradient leading-tight"
+            >
+              {project.title}
+            </motion.h2>
             <p className="text-muted-foreground text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-prose">
               {project.description}
             </p>
