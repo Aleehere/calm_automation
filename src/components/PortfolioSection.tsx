@@ -56,7 +56,7 @@ const projects: Project[] = [
     description: 'Built an n8n workflow using AI Agents to analyze form submissions, classify complaints/features, create records, and notify teams.',
     tech: ['n8n', 'AI Agents', 'Slack'],
     icon: <Bot className="h-6 w-6" />,
-    screenshot: 'https://images.unsplash.com/photo-1531746790731-6c087fecd05a?auto=format&fit=crop&q=80&w=800',
+    screenshot: '/ai-complaint-classification.png',
   },
   {
     title: 'AI Commerce Assistant (Telegram + Shopify)',
