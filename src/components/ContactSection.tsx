@@ -28,19 +28,14 @@ const contactInfo = [
 
 const socialLinks = [
   {
-    icon: <Github className="h-5 w-5" />,
-    href: 'https://github.com/Aleehere',
+    icon: <Github className="h-6 w-6" />,
+    href: 'https://github.com/ar-rehman786',
     label: 'GitHub',
   },
   {
-    icon: <Linkedin className="h-5 w-5" />,
-    href: 'https://linkedin.com',
+    icon: <Linkedin className="h-6 w-6" />,
+    href: 'https://www.linkedin.com/in/abdul-rehman-238361231/',
     label: 'LinkedIn',
-  },
-  {
-    icon: <MessageCircle className="h-5 w-5" />,
-    href: 'https://wa.me/923079660028',
-    label: 'WhatsApp',
   },
 ];
 
@@ -140,19 +135,31 @@ const ContactSection = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.6 }}
             >
-              <p className="text-sm text-muted-foreground mb-4">Connect with me</p>
-              <div className="flex gap-4">
-                {socialLinks.map((link) => (
-                  <a
+              <p className="text-sm text-muted-foreground mb-6 font-medium tracking-tight">Connect with me</p>
+              <div className="flex gap-6">
+                {socialLinks.map((link, index) => (
+                  <motion.a
                     key={link.label}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-lg bg-muted border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all hover:shadow-[0_0_20px_hsl(186_100%_50%/0.2)]"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.7 + (index * 0.12) // GitHub appears first, LinkedIn 120ms after
+                    }}
+                    whileHover={{
+                      y: -5,
+                      scale: 1.05,
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)"
+                    }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-14 h-14 rounded-xl bg-muted/50 border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors duration-300"
                     aria-label={link.label}
                   >
                     {link.icon}
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </motion.div>
