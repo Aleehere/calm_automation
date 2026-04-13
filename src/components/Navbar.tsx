@@ -5,7 +5,6 @@ import { ThemeToggle } from './ThemeToggle';
 
 const navItems = [
   { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
   { name: 'Skills', href: '#skills' },
   { name: 'Portfolio', href: '#portfolio' },
   { name: 'Experience', href: '#experience' },
@@ -33,20 +32,22 @@ const Navbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'glass-prism py-3 translate-y-2 mx-4 rounded-2xl' : 'py-6'
         }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#home" className="text-xl font-bold text-gradient">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+        <div className="flex items-center justify-between h-16 md:h-22">
+          <a href="#home" className="text-2xl font-bold text-gradient tracking-tighter">
             AR
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-10">
             {navItems.map((item) => (
-              <a key={item.name} href={item.href} className="nav-link text-sm font-medium">
+              <a key={item.name} href={item.href} className="nav-link text-sm font-semibold tracking-wide uppercase">
                 {item.name}
               </a>
             ))}
-            <ThemeToggle />
+            <div className="pl-4 border-l border-border/50">
+              <ThemeToggle />
+            </div>
           </div>
 
           {/* Mobile Menu Button / Toggle */}

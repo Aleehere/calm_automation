@@ -1,7 +1,6 @@
 import ParticleBackground from '@/components/ParticleBackground';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
-import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
 import PortfolioSection from '@/components/PortfolioSection';
 import ExperienceSection from '@/components/ExperienceSection';
@@ -10,6 +9,9 @@ import Footer from '@/components/Footer';
 import StatsSection from '@/components/StatsSection';
 import { motion } from 'framer-motion';
 import CinematicShader from '@/components/CinematicShader';
+import { useState } from 'react';
+import { EntryGateway } from '@/components/EntryGateway';
+import FloatingProfile from '@/components/FloatingProfile';
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
@@ -35,20 +37,24 @@ const SectionWrapper = ({ children, id }: { children: React.ReactNode, id: strin
 );
 
 const Index = () => {
+  const [hasEntered, setHasEntered] = useState(false);
+
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
+      {!hasEntered && <EntryGateway onComplete={() => setHasEntered(true)} />}
+      
       <ParticleBackground />
       <CinematicShader />
       <Navbar />
       <main className="relative z-10">
         <SectionWrapper id="home"><HeroSection /></SectionWrapper>
         <SectionWrapper id="stats"><StatsSection /></SectionWrapper>
-        <SectionWrapper id="about"><AboutSection /></SectionWrapper>
         <SectionWrapper id="skills"><SkillsSection /></SectionWrapper>
         <SectionWrapper id="portfolio"><PortfolioSection /></SectionWrapper>
         <SectionWrapper id="experience"><ExperienceSection /></SectionWrapper>
         <SectionWrapper id="contact"><ContactSection /></SectionWrapper>
       </main>
+      <FloatingProfile />
       <Footer />
     </div>
   );

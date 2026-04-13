@@ -197,25 +197,25 @@
   }
 
   .glow-button {
-    @apply relative overflow-hidden transition-all duration-300 font-semibold;
+    @apply relative overflow-hidden transition-all duration-500 font-semibold;
   }
 
-  /* Primary Button Styling */
+  /* Premium Glow: Primary Button */
   .glow-button.glow-primary {
-    @apply bg-primary text-white border-none shadow-sm;
+    @apply bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.2)];
   }
 
   .glow-button.glow-primary:hover {
-    @apply brightness-95 shadow-md;
+    @apply shadow-[0_0_35px_rgba(var(--primary),0.4)] -translate-y-0.5;
   }
 
-  /* Secondary/Outline Button Styling */
+  /* Premium Glow: Outline Button */
   .glow-button.glow-outline {
-    @apply border border-primary text-primary bg-white;
+    @apply border border-primary/20 text-primary bg-background/40 backdrop-blur-sm;
   }
 
   .glow-button.glow-outline:hover {
-    @apply bg-primary/5 shadow-sm;
+    @apply border-primary/40 bg-primary/5 shadow-[0_0_25px_rgba(var(--primary),0.15)] -translate-y-0.5;
   }
 
   .section-container {
