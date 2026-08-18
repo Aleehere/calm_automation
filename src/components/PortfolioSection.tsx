@@ -782,27 +782,30 @@ const SYSTEMS: System[] = [
 ];
 
 // ─── Floating Preview Panel ───────────────────────────────────────────────────
-interface PreviewState { system: System; x: number; y: number; }
+interface PreviewPos {
+  x: number;
+  y: number;
+}
+
+interface PreviewState {
+  system: System;
+  pos: PreviewPos;
+}
 
 const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
-  const PREVIEW_W = 300;
-  const PREVIEW_H = 190;
-  const rawX = useMotionValue(preview.x);
-  const rawY = useMotionValue(preview.y);
-  const springX = useSpring(rawX, { stiffness: 280, damping: 30, mass: 0.6 });
-  const springY = useSpring(rawY, { stiffness: 280, damping: 30, mass: 0.6 });
-  const imgX = useTransform(springX, (v) => (v / window.innerWidth - 0.5) * -16);
-  const imgY = useTransform(springY, (v) => (v / window.innerHeight - 0.5) * -12);
-  rawX.set(preview.x);
-  rawY.set(preview.y);
-  const left = useTransform(springX, (v) => Math.min(Math.max(v + 28, 16), window.innerWidth - PREVIEW_W - 24));
-  const top = useTransform(springY, (v) => Math.min(Math.max(v - 60, 16), window.innerHeight - PREVIEW_H - 24));
+  const PREVIEW_W = 320;
+  const PREVIEW_H = 200;
 
   const images = preview.system.previewImages && preview.system.previewImages.length > 0
     ? preview.system.previewImages
     : [preview.system.screenshot];
 
   const [currentIdx, setCurrentIdx] = useState(0);
+
+  // Reset carousel index whenever project system changes
+  useEffect(() => {
+    setCurrentIdx(0);
+  }, [preview.system.id]);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -817,14 +820,22 @@ const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
   return (
     <motion.div
       key={preview.system.id}
-      initial={{ opacity: 0, scale: 0.92, y: 8 }}
+      initial={{ opacity: 0, scale: 0.92, y: 6 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.94, y: 6 }}
+      exit={{ opacity: 0, scale: 0.94, y: 4 }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      style={{ left, top, width: PREVIEW_W, height: PREVIEW_H, position: 'fixed', zIndex: 9998, pointerEvents: 'none' }}
-      className="overflow-hidden rounded-2xl border border-primary/30 bg-[#010812]/90 backdrop-blur-2xl shadow-[0_0_40px_rgba(var(--primary),0.18),0_20px_60px_rgba(0,0,0,0.7)]"
+      style={{
+        left: preview.pos.x,
+        top: preview.pos.y,
+        width: PREVIEW_W,
+        height: PREVIEW_H,
+        position: 'fixed',
+        zIndex: 9998,
+        pointerEvents: 'none',
+      }}
+      className="overflow-hidden rounded-2xl border border-primary/30 bg-[#010812]/95 backdrop-blur-2xl shadow-[0_0_40px_rgba(var(--primary),0.18),0_20px_60px_rgba(0,0,0,0.7)]"
     >
-      <motion.div className="absolute inset-0 scale-[1.15]" style={{ x: imgX, y: imgY }}>
+      <div className="absolute inset-0 scale-[1.05]">
         <AnimatePresence mode="wait">
           <motion.img
             key={activeImage}
@@ -838,7 +849,7 @@ const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
             loading="lazy"
           />
         </AnimatePresence>
-      </motion.div>
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-[#010812]/95 via-[#010812]/40 to-transparent" />
       <div className="absolute bottom-0 inset-x-0 p-3 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
@@ -1364,25 +1375,36 @@ const MiniWorkflow = ({ flow }: { flow: WorkflowNode[] }) => {
 interface SystemCardProps {
   system: System;
   index: number;
-  onHover: (s: System | null, x: number, y: number) => void;
+  onHover: (s: System | null, el: HTMLElement | null) => void;
   onClick: (s: System) => void;
 }
 
 const SystemCard = ({ system, index, onHover, onClick }: SystemCardProps) => {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => { onHover(system, e.clientX, e.clientY); }, [system, onHover]);
-  const handleMouseEnter = useCallback((e: React.MouseEvent) => { setIsHovered(true); onHover(system, e.clientX, e.clientY); }, [system, onHover]);
-  const handleMouseLeave = useCallback(() => { setIsHovered(false); onHover(null, 0, 0); }, [onHover]);
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    if (cardRef.current) {
+      onHover(system, cardRef.current);
+    }
+  }, [system, onHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    onHover(null, null);
+  }, [onHover]);
 
   return (
     <motion.div
-      ref={ref}
+      ref={(node) => {
+        ref(node);
+        (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.09, ease: [0.16, 1, 0.3, 1] }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => onClick(system)}
@@ -1445,20 +1467,88 @@ const SystemCard = ({ system, index, onHover, onClick }: SystemCardProps) => {
   );
 };
 
+// Helper: Calculate floating preview coordinates anchored to current card
+const calculateCardPreviewPos = (el: HTMLElement): PreviewPos | null => {
+  const PREVIEW_W = 320;
+  const PREVIEW_H = 200;
+  const GAP = 12;
+  const PADDING = 20;
+
+  const rect = el.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return null;
+
+  const cardCenterX = rect.left + rect.width / 2;
+  let x = cardCenterX - PREVIEW_W / 2;
+  x = Math.max(PADDING, Math.min(x, window.innerWidth - PREVIEW_W - PADDING));
+
+  // Preferred placement: Above hovered card
+  let y = rect.top - PREVIEW_H - GAP;
+
+  // Fallback placement: Below hovered card if near top of viewport
+  if (y < PADDING) {
+    y = rect.bottom + GAP;
+    if (y + PREVIEW_H > window.innerHeight - PADDING) {
+      y = Math.max(PADDING, window.innerHeight - PREVIEW_H - PADDING);
+    }
+  }
+
+  return { x, y };
+};
+
 // ─── Section ──────────────────────────────────────────────────────────────────
 const PortfolioSection = () => {
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
-  const [preview, setPreview] = useState<PreviewState | null>(null);
+  const [activeHover, setActiveHover] = useState<{ system: System; el: HTMLElement } | null>(null);
+  const [previewPos, setPreviewPos] = useState<PreviewPos | null>(null);
   const [activeSystem, setActiveSystem] = useState<System | null>(null);
 
-  const handleHover = useCallback((system: System | null, x: number, y: number) => {
-    setPreview(system ? { system, x, y } : null);
+  const updatePosition = useCallback(() => {
+    if (!activeHover) return;
+    const pos = calculateCardPreviewPos(activeHover.el);
+    if (!pos) {
+      setActiveHover(null);
+      setPreviewPos(null);
+    } else {
+      setPreviewPos(pos);
+    }
+  }, [activeHover]);
+
+  const handleHover = useCallback((system: System | null, el: HTMLElement | null) => {
+    if (system && el) {
+      setActiveHover({ system, el });
+      const pos = calculateCardPreviewPos(el);
+      setPreviewPos(pos);
+    } else {
+      setActiveHover(null);
+      setPreviewPos(null);
+    }
   }, []);
 
+  useEffect(() => {
+    if (!activeHover) return;
+
+    let animFrameId: number;
+    const handleScrollOrResize = () => {
+      animFrameId = requestAnimationFrame(updatePosition);
+    };
+
+    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
+    window.addEventListener('resize', handleScrollOrResize, { passive: true });
+
+    return () => {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      window.removeEventListener('scroll', handleScrollOrResize);
+      window.removeEventListener('resize', handleScrollOrResize);
+    };
+  }, [activeHover, updatePosition]);
+
   const handleClick = useCallback((system: System) => {
-    setPreview(null);
+    setActiveHover(null);
+    setPreviewPos(null);
     setActiveSystem(system);
   }, []);
+
+  const previewState = activeHover && previewPos ? { system: activeHover.system, pos: previewPos } : null;
 
   return (
     <section id="portfolio" className="relative py-24 overflow-hidden bg-background">
@@ -1497,7 +1587,7 @@ const PortfolioSection = () => {
 
       {/* Floating Preview */}
       <AnimatePresence>
-        {preview && !activeSystem && <FloatingPreview preview={preview} />}
+        {previewState && !activeSystem && <FloatingPreview preview={previewState} />}
       </AnimatePresence>
 
       {/* System Modal */}
