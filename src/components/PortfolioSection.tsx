@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
   Zap, BrainCircuit, Globe, Database, Mail, Users, FileText,
   Bot, MessageSquare, BarChart3, ShoppingCart, Bell, Cpu,
-  Network, CheckCircle, ArrowUpRight, X, Play
+  Network, CheckCircle, ArrowUpRight, ArrowRight, ArrowLeftRight, X, Play
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -12,6 +13,17 @@ interface WorkflowNode {
   id: string;
   label: string;
   icon: React.ElementType;
+}
+
+interface ArchitectureNode {
+  label: string;
+  icon: React.ElementType;
+  active?: boolean;
+}
+
+interface SystemArchitecture {
+  nodes: ArchitectureNode[];
+  direction?: 'left-to-right' | 'bidirectional';
 }
 
 interface SystemScreenshot {
@@ -42,6 +54,7 @@ interface System {
   howItWorks: string[];
   architectedItems?: string[];
   flow: WorkflowNode[];
+  architecture: SystemArchitecture;
 }
 
 // ─── System Data ──────────────────────────────────────────────────────────────
@@ -168,6 +181,14 @@ const SYSTEMS: System[] = [
       { id: 'ghlb', label: 'GHL B', icon: Database },
       { id: 'verify', label: 'VERIFY', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'bidirectional',
+      nodes: [
+        { label: 'CRM A', icon: Database },
+        { label: 'SYNC', icon: Cpu, active: true },
+        { label: 'CRM B', icon: Database },
+      ],
+    },
   },
   {
     id: 'hvac-crm',
@@ -221,6 +242,14 @@ const SYSTEMS: System[] = [
       { id: 'ghl', label: 'GHL', icon: Database },
       { id: 'followup', label: 'FOLLOW-UP', icon: Mail },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'WORKIZ', icon: Zap },
+        { label: 'ROUTER', icon: Network, active: true },
+        { label: 'GHL', icon: Database },
+      ],
+    },
   },
   {
     id: 'ghl-crm-architecture',
@@ -334,6 +363,14 @@ const SYSTEMS: System[] = [
       { id: 'funnel', label: 'FUNNEL', icon: Network },
       { id: 'convert', label: 'CONVERT', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'CAPTURE', icon: Zap },
+        { label: 'CRM', icon: Database, active: true },
+        { label: 'CONVERT', icon: CheckCircle },
+      ],
+    },
   },
   {
     id: 'ai-chatbot-lead-capture',
@@ -433,6 +470,14 @@ const SYSTEMS: System[] = [
       { id: 'lead', label: 'LEAD', icon: Database },
       { id: 'crm', label: 'CRM', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'SOCIAL', icon: MessageSquare },
+        { label: 'AI', icon: Bot, active: true },
+        { label: 'CRM', icon: Database },
+      ],
+    },
   },
   {
     id: 'lead-nurturing-automation',
@@ -513,6 +558,14 @@ const SYSTEMS: System[] = [
       { id: 'email', label: 'EMAIL', icon: Mail },
       { id: 'followup', label: 'FOLLOW-UP', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'FORM', icon: FileText },
+        { label: 'NURTURE', icon: Mail, active: true },
+        { label: 'FOLLOW-UP', icon: CheckCircle },
+      ],
+    },
   },
   {
     id: 'lead-followup-system',
@@ -601,6 +654,14 @@ const SYSTEMS: System[] = [
       { id: 'router', label: 'ROUTER', icon: Network },
       { id: 'followup', label: 'FOLLOW-UP', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'OUTREACH', icon: Mail },
+        { label: 'RESPONSE', icon: MessageSquare, active: true },
+        { label: 'ROUTE', icon: Network },
+      ],
+    },
   },
   {
     id: 'lead-gen',
@@ -624,6 +685,14 @@ const SYSTEMS: System[] = [
       { id: 'sheet', label: 'Sheets', icon: Database },
       { id: 'out', label: 'CRM', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'FORM', icon: Zap },
+        { label: 'AI', icon: BrainCircuit, active: true },
+        { label: 'CRM', icon: CheckCircle },
+      ],
+    },
   },
   {
     id: 'email-ai',
@@ -646,6 +715,14 @@ const SYSTEMS: System[] = [
       { id: 'cal', label: 'Calendar', icon: CheckCircle },
       { id: 'reply', label: 'Reply', icon: Mail },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'EMAIL', icon: Mail },
+        { label: 'AI', icon: BrainCircuit, active: true },
+        { label: 'BOOK', icon: CheckCircle },
+      ],
+    },
   },
   {
     id: 'order-mon',
@@ -668,6 +745,14 @@ const SYSTEMS: System[] = [
       { id: 'monday', label: 'Monday', icon: BarChart3 },
       { id: 'slack', label: 'Alert', icon: Bell },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'SHOPIFY', icon: ShoppingCart },
+        { label: 'MONITOR', icon: BarChart3, active: true },
+        { label: 'ALERT', icon: Bell },
+      ],
+    },
   },
   {
     id: 'crm-sync',
@@ -690,6 +775,14 @@ const SYSTEMS: System[] = [
       { id: 'api', label: 'APIs', icon: Globe },
       { id: 'sync', label: 'Sync', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'AIRTABLE', icon: Database },
+        { label: 'ROUTER', icon: Network, active: true },
+        { label: 'API', icon: Globe },
+      ],
+    },
   },
   {
     id: 'contract',
@@ -712,6 +805,14 @@ const SYSTEMS: System[] = [
       { id: 'struct', label: 'Structure', icon: Cpu },
       { id: 'excel', label: 'Excel', icon: BarChart3 },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'PDF', icon: FileText },
+        { label: 'AI PARSE', icon: BrainCircuit, active: true },
+        { label: 'EXCEL', icon: BarChart3 },
+      ],
+    },
   },
   {
     id: 'complaint',
@@ -734,6 +835,14 @@ const SYSTEMS: System[] = [
       { id: 'classify', label: 'Classify', icon: BrainCircuit },
       { id: 'slack', label: 'Notify', icon: Bell },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'FORM', icon: Zap },
+        { label: 'AI AGENT', icon: Bot, active: true },
+        { label: 'SLACK', icon: Bell },
+      ],
+    },
   },
   {
     id: 'commerce',
@@ -756,6 +865,14 @@ const SYSTEMS: System[] = [
       { id: 'shopify', label: 'Shopify', icon: ShoppingCart },
       { id: 'reply', label: 'Response', icon: CheckCircle },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'TELEGRAM', icon: MessageSquare },
+        { label: 'AI AGENT', icon: BrainCircuit, active: true },
+        { label: 'SHOPIFY', icon: ShoppingCart },
+      ],
+    },
   },
   {
     id: 'followup',
@@ -778,34 +895,32 @@ const SYSTEMS: System[] = [
       { id: 'ai', label: 'Personalize', icon: BrainCircuit },
       { id: 'email', label: 'Email', icon: Mail },
     ],
+    architecture: {
+      direction: 'left-to-right',
+      nodes: [
+        { label: 'CRM', icon: Users },
+        { label: 'AI ENGINE', icon: BrainCircuit, active: true },
+        { label: 'EMAIL', icon: Mail },
+      ],
+    },
   },
 ];
 
-// ─── Floating Preview Panel ───────────────────────────────────────────────────
-interface PreviewPos {
-  x: number;
-  y: number;
-}
-
-interface PreviewState {
-  system: System;
-  pos: PreviewPos;
-}
-
-const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
+// ─── Card Preview Panel ───────────────────────────────────────────────────────
+const CardPreview = ({ system }: { system: System }) => {
   const PREVIEW_W = 320;
   const PREVIEW_H = 200;
 
-  const images = preview.system.previewImages && preview.system.previewImages.length > 0
-    ? preview.system.previewImages
-    : [preview.system.screenshot];
+  const images = system.previewImages && system.previewImages.length > 0
+    ? system.previewImages
+    : [system.screenshot];
 
   const [currentIdx, setCurrentIdx] = useState(0);
 
   // Reset carousel index whenever project system changes
   useEffect(() => {
     setCurrentIdx(0);
-  }, [preview.system.id]);
+  }, [system.id]);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -815,22 +930,22 @@ const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
     return () => clearInterval(interval);
   }, [images]);
 
-  const activeImage = images[currentIdx] || preview.system.screenshot;
+  const activeImage = images[currentIdx] || system.screenshot;
 
   return (
     <motion.div
-      key={preview.system.id}
-      initial={{ opacity: 0, scale: 0.92, y: 6 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.94, y: 4 }}
+      key={system.id}
+      initial={{ opacity: 0, scale: 0.92, x: '-50%', y: '-46%' }}
+      animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+      exit={{ opacity: 0, scale: 0.94, x: '-50%', y: '-48%' }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        left: preview.pos.x,
-        top: preview.pos.y,
         width: PREVIEW_W,
         height: PREVIEW_H,
-        position: 'fixed',
-        zIndex: 9998,
+        position: 'absolute',
+        left: '50%',
+        top: '35%',
+        zIndex: 40,
         pointerEvents: 'none',
       }}
       className="overflow-hidden rounded-2xl border border-primary/30 bg-[#010812]/95 backdrop-blur-2xl shadow-[0_0_40px_rgba(var(--primary),0.18),0_20px_60px_rgba(0,0,0,0.7)]"
@@ -840,7 +955,7 @@ const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
           <motion.img
             key={activeImage}
             src={activeImage}
-            alt={preview.system.title}
+            alt={system.title}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -853,8 +968,8 @@ const FloatingPreview = ({ preview }: { preview: PreviewState }) => {
       <div className="absolute inset-0 bg-gradient-to-t from-[#010812]/95 via-[#010812]/40 to-transparent" />
       <div className="absolute bottom-0 inset-x-0 p-3 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/60 mb-0.5">{preview.system.category}</p>
-          <p className="text-[11px] font-bold text-white/90 leading-tight line-clamp-1">{preview.system.title}</p>
+          <p className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/60 mb-0.5">{system.category}</p>
+          <p className="text-[11px] font-bold text-white/90 leading-tight line-clamp-1">{system.title}</p>
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {images.length > 1 && (
@@ -947,12 +1062,20 @@ const SystemModal = ({ system, onClose }: { system: System; onClose: () => void 
   const [activeImgIdx, setActiveImgIdx] = useState(0);
   const [lightboxImg, setLightboxImg] = useState<SystemScreenshot | null>(null);
   const glowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   const displayImages: SystemScreenshot[] = system.screenshots && system.screenshots.length > 0
     ? system.screenshots
     : [{ url: system.screenshot, caption: system.title, description: system.description }];
 
   const currentMainImage = displayImages[activeImgIdx] || displayImages[0];
+
+  // Reset modal scroll position to top whenever system changes
+  useEffect(() => {
+    if (modalContentRef.current) {
+      modalContentRef.current.scrollTop = 0;
+    }
+  }, [system.id]);
 
   // Flash the image glow whenever the active node changes
   const handleActiveChange = useCallback((idx: number) => {
@@ -962,7 +1085,18 @@ const SystemModal = ({ system, onClose }: { system: System; onClose: () => void 
     glowTimerRef.current = setTimeout(() => setImageGlowing(false), 700);
   }, []);
 
+  // Lock body scroll and listen for Escape key
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    
+    // Prevent layout shift when scrollbar disappears
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    document.body.style.overflow = 'hidden';
+
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (lightboxImg) {
@@ -973,48 +1107,59 @@ const SystemModal = ({ system, onClose }: { system: System; onClose: () => void 
       }
     };
     document.addEventListener('keydown', handler);
-    document.body.style.overflow = 'hidden';
+
     return () => {
       document.removeEventListener('keydown', handler);
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
       if (glowTimerRef.current) clearTimeout(glowTimerRef.current);
     };
   }, [onClose, lightboxImg]);
 
-  return (
+  return createPortal(
     <>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6"
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[9999] flex items-start justify-center p-3 sm:p-5 md:py-8 md:px-6 overflow-hidden"
       >
         {/* Backdrop */}
-        <motion.div className="absolute inset-0 bg-background/85 backdrop-blur-2xl" onClick={onClose} />
+        <motion.div
+          className="absolute inset-0 bg-background/85 backdrop-blur-2xl"
+          onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
 
         {/* Modal Panel */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 24 }}
+          ref={modalContentRef}
+          initial={{ opacity: 0, scale: 0.95, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 16 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl border border-primary/20 bg-[#020617]/98 backdrop-blur-3xl shadow-[0_0_80px_rgba(var(--primary),0.15),0_40px_100px_rgba(0,0,0,0.8)] z-10"
+          exit={{ opacity: 0, scale: 0.96, y: 12 }}
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full max-w-5xl max-h-[calc(100vh-24px)] sm:max-h-[calc(100vh-40px)] md:max-h-[calc(100vh-64px)] overflow-y-auto rounded-3xl border border-primary/20 bg-[#020617]/98 backdrop-blur-3xl shadow-[0_0_80px_rgba(var(--primary),0.15),0_40px_100px_rgba(0,0,0,0.8)] z-10"
         >
           {/* Top edge glow */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent z-20 pointer-events-none" />
           <div className="absolute inset-x-0 -top-px h-32 bg-gradient-to-b from-primary/[0.05] to-transparent pointer-events-none" />
 
           {/* Close */}
-          <button onClick={onClose}
-            className="absolute top-5 right-5 z-20 p-2 rounded-full bg-primary/5 border border-primary/15 text-foreground/50 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-all duration-300">
+          <button
+            onClick={onClose}
+            aria-label="Close project detail modal"
+            className="absolute top-5 right-5 z-30 p-2.5 rounded-full bg-primary/10 border border-primary/20 text-foreground/60 hover:text-white hover:border-primary/50 hover:bg-primary/20 transition-all duration-300 shadow-lg"
+          >
             <X size={18} />
           </button>
 
           <div className="p-6 md:p-9 flex flex-col gap-7">
 
             {/* ── Header ── */}
-            <div className="flex items-start gap-4 pr-10">
+            <div className="flex items-start gap-4 pr-12">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/60 bg-primary/5 border border-primary/15 rounded-full px-3 py-1">
@@ -1288,7 +1433,7 @@ const SystemModal = ({ system, onClose }: { system: System; onClose: () => void 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[300] flex flex-col items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-2xl"
+            className="fixed inset-0 z-[10000] flex flex-col items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-2xl"
             onClick={() => setLightboxImg(null)}
           >
             <button
@@ -1312,56 +1457,53 @@ const SystemModal = ({ system, onClose }: { system: System; onClose: () => void 
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </>,
+    document.body
   );
 };
 
-// ─── Mini Workflow (Card) ─────────────────────────────────────────────────────
-const MiniWorkflow = ({ flow }: { flow: WorkflowNode[] }) => {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [pulseProgress, setPulseProgress] = useState(0);
-  const startTimeRef = useRef(Date.now());
-  const STEP_DURATION = 900;
-
-  useAnimationFrame(() => {
-    const elapsed = Date.now() - startTimeRef.current;
-    const cycle = elapsed % (flow.length * STEP_DURATION);
-    setActiveIdx(Math.floor(cycle / STEP_DURATION));
-    setPulseProgress((cycle % STEP_DURATION) / STEP_DURATION);
-  });
+// ─── Mini System Map (Card Architecture Strip) ────────────────────────────────
+const MiniSystemMap = ({ architecture }: { architecture: SystemArchitecture }) => {
+  const { nodes, direction = 'left-to-right' } = architecture;
 
   return (
-    <div className="relative w-full flex items-center justify-between px-2 py-4 gap-0">
-      {flow.map((node, i) => {
-        const isActive = i === activeIdx;
-        const isPast = i < activeIdx;
+    <div className="relative w-full flex items-center justify-between px-1 py-1">
+      {nodes.map((node, i) => {
         const Icon = node.icon;
+        const isActive = !!node.active;
+
         return (
-          <div key={node.id} className="flex items-center flex-1 min-w-0">
-            <div className="relative flex flex-col items-center gap-1 flex-shrink-0">
-              <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-500
-                ${isActive ? 'bg-primary/20 border-primary/70 shadow-[0_0_16px_rgba(var(--primary),0.4)]'
-                  : isPast ? 'bg-primary/10 border-primary/30' : 'bg-primary/[0.03] border-primary/10'}`}>
-                <Icon size={14} className={`transition-colors duration-500 ${isActive ? 'text-primary' : isPast ? 'text-primary/60' : 'text-primary/30'}`} />
-                {isActive && (
-                  <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                  </span>
-                )}
+          <div key={node.label} className="contents">
+            {/* Node Box + Label */}
+            <div className="flex flex-col items-center gap-1.5 flex-shrink-0 min-w-[50px] max-w-[84px]">
+              <div
+                className={`w-8 h-8 rounded-xl flex items-center justify-center border transition-all duration-300 ${
+                  isActive
+                    ? 'bg-primary/20 border-primary/75 text-primary shadow-[0_0_14px_rgba(var(--primary),0.35)]'
+                    : 'bg-primary/[0.04] border-primary/15 text-foreground/50 group-hover:border-primary/25'
+                }`}
+              >
+                <Icon size={14} className={isActive ? 'text-primary' : 'text-foreground/50 group-hover:text-foreground/75'} />
               </div>
-              <span className={`text-[8px] font-black uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-primary' : 'text-foreground/30'}`}>
+              <span
+                className={`text-[8.5px] font-bold uppercase tracking-wider text-center leading-tight truncate max-w-full px-0.5 ${
+                  isActive ? 'text-primary font-black' : 'text-foreground/45 group-hover:text-foreground/65'
+                }`}
+              >
                 {node.label}
               </span>
             </div>
-            {i < flow.length - 1 && (
-              <div className="relative flex-1 mx-1 h-[2px] rounded overflow-hidden">
-                <div className="absolute inset-0 bg-primary/10 rounded" />
-                {i === activeIdx && (
-                  <motion.div className="absolute inset-y-0 left-0 bg-primary/60 rounded shadow-[0_0_6px_rgba(var(--primary),0.8)]"
-                    style={{ width: `${pulseProgress * 100}%` }} />
+
+            {/* Clean subtle connector */}
+            {i < nodes.length - 1 && (
+              <div className="flex-1 flex items-center justify-center min-w-[14px] px-1 -mt-4">
+                <div className="h-px flex-1 bg-primary/20" />
+                {direction === 'bidirectional' ? (
+                  <ArrowLeftRight size={10} className="text-primary/50 flex-shrink-0 mx-1" />
+                ) : (
+                  <ArrowRight size={10} className="text-primary/35 flex-shrink-0 mx-1" />
                 )}
-                {i < activeIdx && <div className="absolute inset-0 bg-primary/25 rounded" />}
+                <div className="h-px flex-1 bg-primary/20" />
               </div>
             )}
           </div>
@@ -1375,226 +1517,143 @@ const MiniWorkflow = ({ flow }: { flow: WorkflowNode[] }) => {
 interface SystemCardProps {
   system: System;
   index: number;
-  onHover: (s: System | null, el: HTMLElement | null) => void;
   onClick: (s: System) => void;
 }
 
-const SystemCard = ({ system, index, onHover, onClick }: SystemCardProps) => {
+const SystemCard = ({ system, index, onClick }: SystemCardProps) => {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-  const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-    if (cardRef.current) {
-      onHover(system, cardRef.current);
-    }
-  }, [system, onHover]);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    onHover(null, null);
-  }, [onHover]);
 
   return (
     <motion.div
-      ref={(node) => {
-        ref(node);
-        (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.09, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => onClick(system)}
-      className={`group relative flex flex-col rounded-2xl border backdrop-blur-xl overflow-hidden cursor-pointer
-        transition-all duration-500
-        ${isHovered ? 'border-primary/40 shadow-[0_0_40px_rgba(var(--primary),0.12)] -translate-y-1.5' : 'border-primary/10'}
-        bg-[#020617]/90`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative ${isHovered ? 'z-30' : 'z-10'}`}
     >
-      {/* Category badge */}
-      <div className="absolute top-4 right-4 z-10">
-        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/50 bg-primary/5 border border-primary/15 rounded-full px-2.5 py-1">
-          {system.category}
-        </span>
-      </div>
-
-      {/* Click hint — appears on hover */}
-      <div className={`absolute bottom-4 right-4 z-10 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/25">
-          <Play size={8} className="text-primary" />
-          <span className="text-[8px] font-black uppercase tracking-widest text-primary/80">Explore</span>
-        </div>
-      </div>
-
-      {/* Mini Workflow */}
-      <div className={`relative px-4 pb-2 pt-6 border-b transition-all duration-500 ${isHovered ? 'border-primary/15' : 'border-primary/[0.06]'}`}>
-        <div className={`absolute inset-0 transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/0.06)_0%,transparent_70%)]" />
-        </div>
-        <MiniWorkflow flow={system.flow} />
-      </div>
-
-      {/* Body */}
-      <div className="flex flex-col gap-4 p-5 flex-1">
-        <h3 className={`text-base font-extrabold leading-snug tracking-tight transition-colors duration-300 ${isHovered ? 'text-white' : 'text-foreground/90'}`}>
-          {system.title}
-        </h3>
-        <p className="text-xs text-foreground/50 leading-relaxed font-light line-clamp-2">{system.description}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {system.stack.slice(0, 4).map(s => (
-            <span key={s} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-primary/8 text-primary/70 border border-primary/15">{s}</span>
-          ))}
-          {system.stack.length > 4 && (
-            <span className="text-[9px] font-bold px-2 py-0.5 rounded-md text-foreground/30">+{system.stack.length - 4}</span>
-          )}
-        </div>
-        <div className={`mt-auto pt-4 border-t transition-colors duration-500 ${isHovered ? 'border-primary/20' : 'border-primary/[0.06]'}`}>
-          <p className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/40 mb-2">Key Results</p>
-          <div className="flex flex-col gap-1">
-            {system.results.slice(0, 4).map(r => (
-              <div key={r} className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                <span className={`text-[10px] font-bold transition-colors duration-300 ${isHovered ? 'text-primary' : 'text-foreground/60'}`}>{r}</span>
-              </div>
-            ))}
+      <div
+        onClick={() => onClick(system)}
+        className={`group relative flex flex-col rounded-2xl border backdrop-blur-xl overflow-hidden cursor-pointer
+          transition-all duration-500
+          ${isHovered ? 'border-primary/40 shadow-[0_0_40px_rgba(var(--primary),0.12)] -translate-y-1.5' : 'border-primary/10'}
+          bg-[#020617]/90`}
+      >
+        {/* Click hint — appears on hover */}
+        <div className={`absolute bottom-4 right-4 z-10 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/25">
+            <Play size={8} className="text-primary" />
+            <span className="text-[8px] font-black uppercase tracking-widest text-primary/80">Explore</span>
           </div>
         </div>
+
+        {/* Top Header: Category Badge + Mini System Map */}
+        <div className={`relative px-4 pt-3.5 pb-3 border-b transition-all duration-500 ${isHovered ? 'border-primary/15' : 'border-primary/[0.06]'}`}>
+          <div className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/0.06)_0%,transparent_70%)]" />
+          </div>
+
+          {/* Category Badge Row */}
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/70 bg-primary/8 border border-primary/20 rounded-full px-2.5 py-0.5">
+              {system.category}
+            </span>
+          </div>
+
+          {/* Mini System Map */}
+          <MiniSystemMap architecture={system.architecture} />
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-col gap-4 p-5 flex-1">
+          <h3 className={`text-base font-extrabold leading-snug tracking-tight transition-colors duration-300 ${isHovered ? 'text-white' : 'text-foreground/90'}`}>
+            {system.title}
+          </h3>
+          <p className="text-xs text-foreground/50 leading-relaxed font-light line-clamp-2">{system.description}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {system.stack.slice(0, 4).map(s => (
+              <span key={s} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-primary/8 text-primary/70 border border-primary/15">{s}</span>
+            ))}
+            {system.stack.length > 4 && (
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded-md text-foreground/30">+{system.stack.length - 4}</span>
+            )}
+          </div>
+          <div className={`mt-auto pt-4 border-t transition-colors duration-500 ${isHovered ? 'border-primary/20' : 'border-primary/[0.06]'}`}>
+            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-primary/40 mb-2">Key Results</p>
+            <div className="flex flex-col gap-1">
+              {system.results.slice(0, 4).map(r => (
+                <div key={r} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                  <span className={`text-[10px] font-bold transition-colors duration-300 ${isHovered ? 'text-primary' : 'text-foreground/60'}`}>{r}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={`absolute inset-x-0 bottom-0 h-[2px] transition-all duration-500 ${isHovered ? 'bg-primary/40 shadow-[0_0_12px_rgba(var(--primary),0.6)]' : 'bg-transparent'}`} />
       </div>
-      <div className={`absolute inset-x-0 bottom-0 h-[2px] transition-all duration-500 ${isHovered ? 'bg-primary/40 shadow-[0_0_12px_rgba(var(--primary),0.6)]' : 'bg-transparent'}`} />
+
+      {/* Floating Preview: rendered as absolute child inside card wrapper */}
+      <AnimatePresence>
+        {isHovered && <CardPreview system={system} />}
+      </AnimatePresence>
     </motion.div>
   );
-};
-
-// Helper: Calculate floating preview coordinates anchored to current card
-const calculateCardPreviewPos = (el: HTMLElement): PreviewPos | null => {
-  const PREVIEW_W = 320;
-  const PREVIEW_H = 200;
-  const GAP = 12;
-  const PADDING = 20;
-
-  const rect = el.getBoundingClientRect();
-  if (rect.bottom < 0 || rect.top > window.innerHeight) return null;
-
-  const cardCenterX = rect.left + rect.width / 2;
-  let x = cardCenterX - PREVIEW_W / 2;
-  x = Math.max(PADDING, Math.min(x, window.innerWidth - PREVIEW_W - PADDING));
-
-  // Preferred placement: Above hovered card
-  let y = rect.top - PREVIEW_H - GAP;
-
-  // Fallback placement: Below hovered card if near top of viewport
-  if (y < PADDING) {
-    y = rect.bottom + GAP;
-    if (y + PREVIEW_H > window.innerHeight - PADDING) {
-      y = Math.max(PADDING, window.innerHeight - PREVIEW_H - PADDING);
-    }
-  }
-
-  return { x, y };
 };
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 const PortfolioSection = () => {
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
-  const [activeHover, setActiveHover] = useState<{ system: System; el: HTMLElement } | null>(null);
-  const [previewPos, setPreviewPos] = useState<PreviewPos | null>(null);
   const [activeSystem, setActiveSystem] = useState<System | null>(null);
 
-  const updatePosition = useCallback(() => {
-    if (!activeHover) return;
-    const pos = calculateCardPreviewPos(activeHover.el);
-    if (!pos) {
-      setActiveHover(null);
-      setPreviewPos(null);
-    } else {
-      setPreviewPos(pos);
-    }
-  }, [activeHover]);
-
-  const handleHover = useCallback((system: System | null, el: HTMLElement | null) => {
-    if (system && el) {
-      setActiveHover({ system, el });
-      const pos = calculateCardPreviewPos(el);
-      setPreviewPos(pos);
-    } else {
-      setActiveHover(null);
-      setPreviewPos(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!activeHover) return;
-
-    let animFrameId: number;
-    const handleScrollOrResize = () => {
-      animFrameId = requestAnimationFrame(updatePosition);
-    };
-
-    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
-    window.addEventListener('resize', handleScrollOrResize, { passive: true });
-
-    return () => {
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      window.removeEventListener('scroll', handleScrollOrResize);
-      window.removeEventListener('resize', handleScrollOrResize);
-    };
-  }, [activeHover, updatePosition]);
-
   const handleClick = useCallback((system: System) => {
-    setActiveHover(null);
-    setPreviewPos(null);
     setActiveSystem(system);
   }, []);
 
-  const previewState = activeHover && previewPos ? { system: activeHover.system, pos: previewPos } : null;
-
   return (
-    <section id="portfolio" className="relative py-24 overflow-hidden bg-background">
-      <div className="absolute top-1/4 left-1/3 w-[800px] h-[600px] bg-primary/[0.03] rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-[600px] h-[500px] bg-secondary/[0.04] rounded-full blur-[140px] pointer-events-none" />
+    <>
+      <section id="portfolio" className="relative py-24 overflow-hidden bg-background">
+        <div className="absolute top-1/4 left-1/3 w-[800px] h-[600px] bg-primary/[0.03] rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-[600px] h-[500px] bg-secondary/[0.04] rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        <motion.div ref={ref} initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/70">Production Systems</span>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          <motion.div ref={ref} initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} className="mb-16 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-6">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/70">Production Systems</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gradient mb-5">
+              Automation Systems<br className="hidden md:block" /> I've Built
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed font-light">
+              Real-world workflows, AI systems, and scalable automation pipelines designed to eliminate manual work and drive measurable results.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {SYSTEMS.map((system, i) => (
+              <SystemCard key={system.id} system={system} index={i} onClick={handleClick} />
+            ))}
           </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gradient mb-5">
-            Automation Systems<br className="hidden md:block" /> I've Built
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed font-light">
-            Real-world workflows, AI systems, and scalable automation pipelines designed to eliminate manual work and drive measurable results.
-          </p>
-        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {SYSTEMS.map((system, i) => (
-            <SystemCard key={system.id} system={system} index={i} onHover={handleHover} onClick={handleClick} />
-          ))}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.5 }} className="mt-14 flex justify-center">
+            <a href="#contact" className="group inline-flex items-center gap-3 px-7 py-3.5 rounded-full border border-primary/25 bg-primary/5 text-sm font-bold text-foreground/70 hover:text-white hover:border-primary/50 hover:bg-primary/10 transition-all duration-300">
+              Want a custom system built?
+              <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+            </a>
+          </motion.div>
         </div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.5 }} className="mt-14 flex justify-center">
-          <a href="#contact" className="group inline-flex items-center gap-3 px-7 py-3.5 rounded-full border border-primary/25 bg-primary/5 text-sm font-bold text-foreground/70 hover:text-white hover:border-primary/50 hover:bg-primary/10 transition-all duration-300">
-            Want a custom system built?
-            <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Floating Preview */}
-      <AnimatePresence>
-        {previewState && !activeSystem && <FloatingPreview preview={previewState} />}
-      </AnimatePresence>
+      </section>
 
       {/* System Modal */}
       <AnimatePresence>
         {activeSystem && <SystemModal system={activeSystem} onClose={() => setActiveSystem(null)} />}
       </AnimatePresence>
-    </section>
+    </>
   );
 };
 
